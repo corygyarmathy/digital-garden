@@ -71,6 +71,14 @@
             inherit pkgs site;
             inherit (self.lib) mkGarden;
           };
+          render = import ./checks/render.nix {
+            inherit pkgs;
+            garden = gardenFor pkgs;
+          };
+          fmt-gate = import ./checks/fmt-gate.nix {
+            inherit pkgs;
+            formatter = self.formatter.${system};
+          };
           # Building it runs shellcheck over the script, which is as close as
           # a check gets to the preview without a browser.
           inherit (self.packages.${system}) garden-preview;
