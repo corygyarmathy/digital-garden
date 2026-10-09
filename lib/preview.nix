@@ -6,10 +6,12 @@
 # without deploying one. That loop is minutes long and it is the real reason
 # customising the garden felt expensive; the render itself is well under a second.
 #
-# So this runs the SAME renderer and the SAME Caddy config as the service (see
+# So this runs the SAME pipeline and the SAME Caddy config as the service (see
 # lib/hugo.nix and lib/serve.nix), against the real vault on this machine, and
-# re-renders on save. A preview that diverged from production would be worse than
-# none at all: it would let you tune CSS against a page the server will never emit.
+# re-renders on save. It builds them from this repository's lock and the server
+# from the fleet's, so the Hugo and Pagefind match only while both locks are
+# current. A preview that diverged from production would be worse than none at
+# all: it would let you tune CSS against a page the server will never emit.
 #
 # It reads the vault, and writes only to a temp directory and a dates cache.
 # The publish boundary is the filter, exactly as in production — an unpublished
