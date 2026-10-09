@@ -44,10 +44,10 @@ let
   # when the command is run from the repository root, so that editing either
   # re-renders with no Nix evaluation in the loop - the fixture is edited
   # about as often as the CSS it exists to exercise. The stylesheet's path is
-  # derived from the one the renderer bakes in, so pointing lib/site.nix at
-  # another file moves the preview with it.
-  workingTreeStyleSheet = lib.path.removePrefix ../../../.. styleSheet;
-  workingTreeFixture = "modules/services/digital-garden/lib/hugo/fixture";
+  # derived from the one the renderer bakes in, and the fixture's from the one
+  # the pipeline hands over, so moving either file moves the preview with it.
+  workingTreeStyleSheet = lib.path.removePrefix ../. styleSheet;
+  workingTreeFixture = lib.path.removePrefix ../. fixture;
 
   # The same rule the service ignores vault paths by, imported rather than
   # passed in: it reads no configuration, so there is nothing for a host to
@@ -87,7 +87,7 @@ pkgs.writeShellApplication {
       --vault PATH   Obsidian vault to publish from
                      (default: $GARDEN_VAULT, else ${defaultVault})
       --css PATH     stylesheet to render with. Defaults to the working-tree
-                     copy if you are sitting in the dotfiles repo, so that
+                     copy if you are sitting in the garden repo, so that
                      editing it re-renders without a Nix evaluation.
       --port N       port to serve on (default 8087)
       --once         render once and exit; do not serve or watch
@@ -113,7 +113,7 @@ pkgs.writeShellApplication {
       else
         css=${styleSheet}
         echo "note: using the stylesheet baked into the renderer." >&2
-        echo "      run from the dotfiles repo root, or pass --css, to edit it live." >&2
+        echo "      run from the garden repo root, or pass --css, to edit it live." >&2
       fi
     fi
 
@@ -127,7 +127,7 @@ pkgs.writeShellApplication {
       else
         vault=${fixture}
         echo "note: using the fixture baked into this command." >&2
-        echo "      run from the dotfiles repo root to edit it live." >&2
+        echo "      run from the garden repo root to edit it live." >&2
       fi
     fi
 

@@ -1093,7 +1093,7 @@ def to_html(tree, notes):
     note), and when it was drawn (so the growth animation can reveal the
     characters in the order the tree grew rather than wiping down the page).
 
-    `leaf` is FIRST in the class list on purpose: checks/digital-garden.nix
+    `leaf` is FIRST in the class list on purpose: dotfiles' checks/digital-garden.nix
     matches `<span class="leaf[^"]*" data-note=` to count the notes on the
     served tree, which is the gate on this feature's one real claim.
 
