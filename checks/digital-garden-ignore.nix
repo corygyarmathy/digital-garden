@@ -22,8 +22,8 @@
 # machine to run them.
 { pkgs }:
 let
-  ignore = import ../modules/services/digital-garden/lib/ignore.nix;
-  filter = import ../modules/services/digital-garden/lib/filter.nix { inherit pkgs; };
+  ignore = import ../lib/ignore.nix;
+  filter = import ../lib/filter.nix { inherit pkgs; };
   python = pkgs.python3.withPackages (ps: [ ps.pyyaml ]);
 in
 pkgs.runCommand "check-digital-garden-ignore"

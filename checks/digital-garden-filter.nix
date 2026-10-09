@@ -10,16 +10,16 @@
 # and its refusal is the assertion.
 #
 # The fixture is built inside this script and is entirely separate from the
-# VM check's vault fixture in checks/digital-garden.nix, which it does not
+# VM check's vault fixture in dotfiles' checks/digital-garden.nix, which it does not
 # disturb: that check keeps exercising the ordinary render, and this one only
 # adds the set's new test seam.
 { pkgs }:
 let
   # The filter as ONE directory - the same assembly the service and the
   # preview run, not a copy assembled a second time here. See lib/filter.nix.
-  filter = import ../modules/services/digital-garden/lib/filter.nix { inherit pkgs; };
+  filter = import ../lib/filter.nix { inherit pkgs; };
   # The ignore rule is an argument to the filter; pass the service's own.
-  ignore = import ../modules/services/digital-garden/lib/ignore.nix;
+  ignore = import ../lib/ignore.nix;
   # pyyaml for the frontmatter pass, exactly as the service's build script
   # provides it.
   python = pkgs.python3.withPackages (ps: [ ps.pyyaml ]);
