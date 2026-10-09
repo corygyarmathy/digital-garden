@@ -76,5 +76,31 @@
           inherit (self.packages.${system}) garden-preview;
         }
       );
+
+      # `nix fmt` formats the tree; `nix fmt -- --ci` is the CI gate. What
+      # runs on each file type is ./treefmt.toml; this wrapper only supplies
+      # the binaries, from this flake's own nixpkgs so the versions deciding
+      # the gate are the ones in flake.lock. The list must cover every
+      # command treefmt.toml declares.
+      formatter = forAllSystems (
+        system:
+        let
+          pkgs = nixpkgs.legacyPackages.${system};
+        in
+        pkgs.writeShellApplication {
+          name = "formatter";
+          runtimeInputs = with pkgs; [
+            black
+            markdownlint-cli2
+            nixfmt
+            prettier
+            taplo
+            treefmt
+          ];
+          text = ''
+            exec treefmt "$@"
+          '';
+        }
+      );
     };
 }
