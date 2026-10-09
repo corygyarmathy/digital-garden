@@ -3,7 +3,7 @@
 
   # This lock governs this repository's own checks and preview, and nothing
   # else: `lib.mkGarden` builds from the `pkgs` its caller hands it.
-  inputs.nixpkgs.url = "github:nixos/nixpkgs/nixos-unstable";
+  inputs.nixpkgs.url    =   "github:nixos/nixpkgs/nixos-unstable";
 
   outputs =
     { self, nixpkgs }:
