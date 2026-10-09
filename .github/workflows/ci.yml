@@ -1,0 +1,41 @@
+name: CI
+
+# The gate on master. A merge here reaches production with no human step:
+# dotfiles' nightly `flake-update` bumps this repository's revision and
+# auto-merges when its own gate is green (corygyarmathy/dotfiles#365).
+#
+# NOTE: the `garden ci` job name is the status-check context required by the
+# `protect-master` repository ruleset. Renaming that job silently blocks every
+# merge until the ruleset is updated to match, so treat the two as a pair.
+
+on:
+  push:
+    branches: [master]
+  pull_request:
+    branches: [master]
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+concurrency:
+  group: ci-${{ github.ref }}
+  cancel-in-progress: ${{ github.event_name == 'pull_request' }}
+
+jobs:
+  ci:
+    name: garden ci
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+
+      - uses: DeterminateSystems/nix-installer-action@3138316df39ed29be04236d7ffc686fa525866aa # v23
+
+      # `nix fmt` resolves to the treefmt wrapper (flake.nix), which formats in
+      # place and then fails because it changed something - that is what makes
+      # it a gate.
+      - name: Check formatting
+        run: nix fmt -- --ci
+
+      - name: Flake check
+        run: nix flake check --print-build-logs
