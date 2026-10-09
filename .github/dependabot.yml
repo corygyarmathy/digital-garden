@@ -1,0 +1,53 @@
+version: 2
+
+# Dependabot keeps the actions pinned inside .github/workflows current. They
+# are pinned to full commit SHAs, which is the right call for supply chain but
+# makes staleness invisible: nothing about `actions/checkout@3d3c42e...` says
+# it is behind, and the trailing `# v7.0.1` comment is only as truthful as the
+# last person to hand-edit it. Dependabot rewrites both. Without it, the first
+# sign of a stale pin is the required `garden ci` check failing on a runner
+# change, which blocks every merge to master.
+#
+# The `github-actions` block of dotfiles' .github/dependabot.yml, copied rather
+# than shared for the same reason treefmt.toml is (see its header). Dependabot
+# has no Nix ecosystem, so it cannot touch flake.lock.
+
+updates:
+  - package-ecosystem: "github-actions"
+    # `/` is correct even though the workflows live in .github/workflows -
+    # Dependabot always scans that directory relative to the repository root.
+    directory: "/"
+
+    schedule:
+      interval: "weekly"
+      day: "monday"
+      time: "06:00"
+      timezone: "Etc/UTC" # 14:00 Perth
+
+    # A compromised action release is typically public within a day or two
+    # (tj-actions/changed-files, March 2025), so waiting a week means the
+    # ecosystem does the review that no one is realistically going to do by
+    # squinting at a SHA diff. Security updates ignore cooldown by design.
+    cooldown:
+      default-days: 7
+
+    open-pull-requests-limit: 4
+
+    # Matches the conventional-commit style in git log -> `ci(deps): bump ...`.
+    commit-message:
+      prefix: "ci"
+      include: "scope"
+
+    groups:
+      # One PR for the boring bumps.
+      actions:
+        applies-to: version-updates
+        patterns: ["*"]
+        update-types: ["minor", "patch"]
+
+      # Majors get their own PR, so that a break is attributable to one action
+      # instead of a batch.
+      actions-major:
+        applies-to: version-updates
+        patterns: ["*"]
+        update-types: ["major"]
