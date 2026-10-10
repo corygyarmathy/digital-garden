@@ -1,0 +1,98 @@
+name: flake-update
+
+# Daily flake.lock updater (corygyarmathy/dotfiles#378).
+#
+# This lock governs only this repository's checks and preview: the served site
+# is built with the fleet's `pkgs`, which dotfiles' own nightly updater moves.
+# Nothing else moves this one, so without this workflow the preview drifts away
+# from the Hugo and Pagefind the server runs, and a template change that renders
+# here can fail only at dotfiles' lock-bump gate.
+#
+# One job, unlike dotfiles' updater: there is one input and no host closure to
+# diff, so the PR records the nixpkgs revision range and `garden ci` does the
+# rest.
+#
+# Checkout and PR creation use FLAKE_UPDATE_TOKEN (a fine-grained PAT scoped to
+# this repository) rather than the default GITHUB_TOKEN: GitHub suppresses
+# workflow events on PRs opened by GITHUB_TOKEN, so ci.yml would never run and
+# the `garden ci` required check would never arrive.
+#
+# The ruleset's strict policy means a PR left open while master moves goes
+# stale. Nothing nudges it; the next day's run rebuilds the branch on master,
+# which brings it up to date.
+
+on:
+  schedule:
+    # 14:00 UTC, an hour before dotfiles' 15:00 UTC updater, so both locks land
+    # on nearly the same nixos-unstable revision each night.
+    - cron: "0 14 * * *"
+  workflow_dispatch: {}
+
+permissions:
+  contents: read
+
+# One updater at a time; two overlapping runs would race on deps/flake-lock.
+concurrency:
+  group: flake-update
+  cancel-in-progress: false
+
+jobs:
+  update:
+    name: update lock
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+        with:
+          token: ${{ secrets.FLAKE_UPDATE_TOKEN }}
+
+      - uses: DeterminateSystems/nix-installer-action@3138316df39ed29be04236d7ffc686fa525866aa # v23
+
+      - name: Update flake.lock
+        id: update
+        run: |
+          set -euo pipefail
+          before="$(jq -r .nodes.nixpkgs.locked.rev flake.lock)"
+          nix flake update
+          if git diff --quiet -- flake.lock; then
+            echo "changed=false" >> "$GITHUB_OUTPUT"
+            echo "::notice::flake.lock is already current; nothing to do."
+            exit 0
+          fi
+          after="$(jq -r .nodes.nixpkgs.locked.rev flake.lock)"
+          {
+            echo "changed=true"
+            echo "before=$before"
+            echo "after=$after"
+          } >> "$GITHUB_OUTPUT"
+
+      - name: Open / update the flake bump PR
+        id: cpr
+        if: steps.update.outputs.changed == 'true'
+        uses: peter-evans/create-pull-request@5f6978faf089d4d20b00c7766989d076bb2fc7f1 # v8
+        with:
+          token: ${{ secrets.FLAKE_UPDATE_TOKEN }}
+          branch: deps/flake-lock
+          base: master
+          delete-branch: true
+          add-paths: flake.lock
+          title: "build(nix): update flake.lock"
+          commit-message: |
+            build(nix): update flake.lock
+
+            nixpkgs: ${{ steps.update.outputs.before }} -> ${{ steps.update.outputs.after }}
+            https://github.com/NixOS/nixpkgs/compare/${{ steps.update.outputs.before }}...${{ steps.update.outputs.after }}
+          body: |
+            Automated `flake.lock` update, so the preview and this repository's checks build with the nixpkgs the fleet is about to serve the site with.
+
+            nixpkgs: [`${{ steps.update.outputs.before }}...${{ steps.update.outputs.after }}`](https://github.com/NixOS/nixpkgs/compare/${{ steps.update.outputs.before }}...${{ steps.update.outputs.after }})
+
+            Auto-merges once `garden ci` passes.
+          labels: nix
+
+      # Schedules the merge; the ruleset's required check is the actual gate.
+      # Idempotent, so re-running against an existing PR is safe.
+      - name: Enable auto-merge
+        if: steps.update.outputs.changed == 'true'
+        env:
+          GH_TOKEN: ${{ secrets.FLAKE_UPDATE_TOKEN }}
+        run: gh pr merge --auto --squash "${{ steps.cpr.outputs.pull-request-number }}"
