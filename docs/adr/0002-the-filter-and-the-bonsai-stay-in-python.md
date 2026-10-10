@@ -8,13 +8,13 @@
 
 ## Context
 
-`publish-filter.py` and `bonsai.py` are two Python programs, roughly 2,500 lines together, in a repository that is otherwise Nix, Hugo templates and CSS. Someone proposed rewriting them in Go, on the general argument that Python past a few hundred lines resists organisation and testing. The filter is the publish boundary, the code that stands between a private note and a public URL. That makes it the part of the garden whose failure is public and cannot be undone, and the part where a rewrite carries the most risk.
+`publish-filter.py` and `bonsai.py` are two Python programs, each well past a few hundred lines, in a repository that is otherwise Nix, Hugo templates and CSS. Someone proposed rewriting them in Go, on the general argument that Python past a few hundred lines resists organisation and testing. The filter is the publish boundary, the code that stands between a private note and a public URL. That makes it the part of the garden whose failure is public and cannot be undone, and the part where a rewrite carries the most risk.
 
 ## Decision
 
 **1. The filter and the bonsai stay in Python.** Testability is not a reason to rewrite them, because the test suite that makes them safe does not depend on the language: a fixture vault goes in, and a staging tree and rendered HTML come out. That suite is worth building whatever the filter is written in, and changing the language first does not make it easier to build.
 
-Nor is the disorganisation a property of Python. Most of `publish-filter.py` is small pure functions that are fine. The hard-to-read part is one long `main` holding five passes, the fifth of which does three jobs. That shape would carry into a rewrite in any language unless someone fixes it deliberately, so it is worth fixing on its own terms first.
+Nor is the disorganisation a property of Python. Most of `publish-filter.py` is small pure functions that are fine. The hard-to-read part is one long `main` that runs every pass in sequence, the last of which does several jobs. That shape would carry into a rewrite in any language unless someone fixes it deliberately, so it is worth fixing on its own terms first.
 
 **2. A rewrite is reopened only behind a characterisation suite, and in a stated order.** Both conditions exist to stop a rewrite from being the thing that breaks the publish boundary:
 
