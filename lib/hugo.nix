@@ -8,7 +8,8 @@
 # resolves plugins over the network at build time fails in the one way a CI
 # gate cannot see: the build succeeds and the site is quietly missing features.
 # Anything added below should be weighed against that, not against convenience.
-# See docs/adr/ for how this was arrived at.
+# See dotfiles' ADR 0001 for how this was arrived at:
+# https://github.com/corygyarmathy/dotfiles/blob/ecb3e12cc399b10b8fb6acd19a6cf3159611f06b/docs/adr/0001-gitops-deployment-with-a-promoted-ref.md
 #
 # What keeps this file short is that publish-filter.py already owns the hard
 # parts. The staging tree's links carry finished URLs and its files are named
