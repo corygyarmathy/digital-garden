@@ -4,7 +4,7 @@ thesis: Every element the theme styles, on one page, so a stylesheet change can 
 # Hand-written, and the fixture's reason for it is the fixture's reason for
 # everything: this is the note that has to render the evergreen glyph and the
 # evergreen count, and a three-note vault does not earn one on the model's own
-# terms. It exercises item 14's override at the same time.
+# terms. It exercises the hand-written maturity override at the same time.
 maturity: evergreen
 ---
 
@@ -57,7 +57,7 @@ Headings wrap. The line-height they wrap at is set separately from the body's, a
 
 ## Callouts
 
-Obsidian's callout syntax, rendered by `_markup/render-blockquote.html`. Every hue the stylesheet names appears here, because the point of the set is that it reads as one family and only the hue changes — and, since item 16, every distinct icon too, because the icon is the information the hue already carries, and the fixture exists to judge both by looking.
+Obsidian's callout syntax, rendered by `_markup/render-blockquote.html`. Every hue the stylesheet names appears here, because the point of the set is that it reads as one family and only the hue changes — and every distinct icon too, because the icon is the information the hue already carries, and the fixture exists to judge both by looking.
 
 > [!note] A note
 > The default type, and the one every unknown type falls back to.

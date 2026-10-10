@@ -95,7 +95,7 @@ computed stage, exactly as a hand-written `published:` already beats the
 ledger; `maturity_score` is always the computed number, for debugging and for
 the margin that will show it.
 
-The margin (item 17 of the design plan) is fed here too, because it is the
+The note's margin is fed here too, because it is the
 same parsing the maturity model already does. Every note is given a
 `word_count`, a `reading_time` (both from the body the filter actually emits),
 and a `sections` list — one entry per `##`, carrying the heading's `id` (the
@@ -148,13 +148,12 @@ from pathlib import Path
 
 import yaml
 
-# The bonsai (docs/plans/digital-garden-design.md, item 18): the tree on the
-# landing page, whose every foliage pad is one published note. It lives beside
-# this file rather than inside it because it is a page of arithmetic that has
-# nothing to do with filtering, and because it can then be run on its own to
-# look at trees - which is the only way the plan's taste pass can work. This
-# filter is what calls it, because this is the only thing that knows the
-# published set. See bonsai.py.
+# The bonsai: the tree on the landing page, whose every foliage pad is one
+# published note. It lives beside this file rather than inside it because it
+# is a page of arithmetic that has nothing to do with filtering, and because
+# it can then be run on its own to look at trees - which is the only way to
+# judge whether one looks right. This filter is what calls it, because this is
+# the only thing that knows the published set. See bonsai.py.
 import bonsai
 
 # The libyaml-backed loader when it is available, the pure-Python one otherwise.
@@ -247,8 +246,7 @@ ATTACHMENT_SUFFIXES = {
 H2_HEADING = re.compile(r"^##(?!#)[ \t]+", re.M)
 # The maturity model, in one place so the weights are one edit. These are the
 # numbers the 2026-08-31 prototypes were tuned to; they are a starting point,
-# not a finding (see docs/plans/digital-garden-design.md, item 14). The stage
-# cuts: seedling below MATURITY_SAPLING, sapling up to MATURITY_EVERGREEN.
+# not a finding. The stage cuts: seedling below MATURITY_SAPLING, sapling up to MATURITY_EVERGREEN.
 MATURITY_SAPLING = 1.5
 MATURITY_EVERGREEN = 5.0
 # The length term saturates at this many words. A linear length term let two
@@ -289,8 +287,8 @@ def note_topic(rel):
 
     Emitted as frontmatter as well as handed to the bonsai, so that the value
     the tree colours a pad with is inspectable in the staging tree next to
-    everything else the filter decided. Item 15 of the design plan is the other
-    consumer, and this is the only place the two items touch.
+    everything else the filter decided. The growth marks and link marks are the
+    other consumer, and this is the only place the two touch.
 
     Deliberately NOT `slugify`. That function reproduces the URLs this site
     was already serving and must keep serving, so it preserves `_` and `~` and
@@ -511,7 +509,7 @@ def git_revisions(vault, rel):
 
 
 def maturity_score(words, backlinks, forward, sections, revisions):
-    """The number behind the maturity stage, as the plan lists its parts.
+    """The number behind the maturity stage.
 
     Components, with the weights the prototypes were tuned to:
 
@@ -859,8 +857,7 @@ def main(argv):
 
     # A note that was renamed has a new key and no entry, which would re-date
     # it. Carry the entry across before the write loop looks anything up, so
-    # a rename preserves `published` (and, from item 14 on, the revision
-    # counter). Runs against the filtered `published` set, so a note that was
+    # a rename preserves `published` (and the revision counter). Runs against the filtered `published` set, so a note that was
     # dropped as unparseable is not mistaken for a rename.
     carry_renames(ledger, published)
 
@@ -1003,7 +1000,7 @@ def main(argv):
 
         body = BARE_LINK_ITEM.sub(annotate, body)
 
-        # The margin, item 17. Computed from the body as it is about to be
+        # The margin. Computed from the body as it is about to be
         # written (the theses just appended included), so the map is a map of
         # what the reader will see. `word_count` and `reading_time` come from
         # the same `words` the maturity model read, one number used twice

@@ -14,8 +14,7 @@
  * fetched to render them. Each is commented with the name it has there, so a
  * value can be traced back without a colour picker.
  *
- * One deliberate departure from Kanagawa as specified, recorded in
- * docs/plans/digital-garden-design.md: headings take no hue. Kanagawa's own
+ * One deliberate departure from Kanagawa as specified: headings take no hue. Kanagawa's own
  * markdown treatment colours them, and the longest note here has twenty-nine;
  * a coloured heading every screen is more page than it is emphasis.
  *
@@ -180,7 +179,7 @@ footer {
 
 /* ── masthead ───────────────────────────────────────────────────────────── */
 
-/* ONE bar, on every page (item 21). The site's name, where else to find me,
+/* ONE bar, on every page. The site's name, where else to find me,
  * and the two controls, with a rule under them.
  *
  * It replaces a pair: this bar on the interior pages and a composition of its
@@ -368,7 +367,7 @@ a.masthead-title:hover {
 /* ── the home page ──────────────────────────────────────────────────────── */
 
 /* What is left of the landing page's composition once the masthead above
- * became the site's only header (item 21): the tree, and the garden counted
+ * became the site's only header: the tree, and the garden counted
  * under it. The name, the links and the tools are in that bar with every
  * other page's, and the page's <h1> is the name in it.
  *
@@ -420,7 +419,7 @@ a.masthead-title:hover {
   text-align: center;
 }
 
-/* The garden counted, from item 14's model — see _partials/colophon.html for
+/* The garden counted, from the maturity model — see _partials/colophon.html for
  * where the numbers come from. Tabular figures so the digits sit in a row
  * rather than shuffling with the vault.
  *
@@ -614,7 +613,7 @@ blockquote {
  * page into a patchwork. Types Obsidian treats as aliases of each other
  * share a hue; a type this file does not know gets --accent, not an error.
  *
- * The label also carries the icon Obsidian gives the type (item 16): the
+ * The label also carries the icon Obsidian gives the type: the
  * title is a <use> into the sprite partial, stroked with currentColor, so it
  * inherits the hue of the callout that carries it from the rule below and
  * this block knows nothing about which type maps to which icon.
@@ -656,7 +655,7 @@ blockquote {
 .callout-done {
   --callout-accent: light-dark(#6f894e, #98bb6c); /* lotusGreen / springGreen */
 }
-/* Item 16's one mapping conflict, settled. The stylesheet used to group
+/* The callout icons' one mapping conflict, settled. The stylesheet used to group
  * important WITH example on violet; Obsidian gives important the flame it
  * gives tip, and example a list. "Match Obsidian" and "keep the hue
  * grouping" disagreed on exactly this type, so the hue follows the icon:
@@ -731,7 +730,7 @@ blockquote {
 
 /* ── growth marks ───────────────────────────────────────────────────────── */
 
-/* The mark is the site's own favicon, grown one stage at a time (item 15):
+/* The mark is the site's own favicon, grown one stage at a time:
  * seedling is the stem and one leaf, sapling adds the second, evergreen adds
  * a crown. One sprite of three symbols in _partials/mark-icons.html, each a
  * filled shape in currentColor, so this block supplies only the size and the
@@ -739,9 +738,7 @@ blockquote {
  * decided in different places on purpose.
  *
  * A mark appears on every internal link (the target's maturity, in the
- * target's topic hue), on every /notes/ entry, and later in the margin
- * (item 17). The three link kinds are told apart by shape, not hue — the
- * decision that shaped this item — because Kanagawa gives about eight usable
+ * target's topic hue), on every /notes/ entry, and in the margin. The three link kinds are told apart by shape, not hue because Kanagawa gives about eight usable
  * hues and the callouts have spent most of them: an internal link takes the
  * target's sprout, a link to a section of the same note takes a dotted
  * underline and no glyph, and an external link keeps the arrow above.
@@ -1120,7 +1117,7 @@ h4:hover > .heading-anchor,
 
 /* ── the margin ──────────────────────────────────────────────────────────── */
 
-/* A margin on every note (item 17), its contents conditional. One piece of
+/* A margin on every note, its contents conditional. One piece of
  * markup with two layouts: beneath the article by default, and in the left
  * margin once there is a margin to put it in (the sidenotes claim the right).
  * See layouts/_partials/rail.html.
@@ -1367,7 +1364,7 @@ h4:hover > .heading-anchor,
 
   /* The home page's header used to need a rule here, anchoring it to this
    * grid, and it does not any more: it is not a header of its own, it is the
-   * masthead every page carries (item 21).
+   * masthead every page carries.
    *
    * That header's fault is worth keeping, because it is what the arithmetic
    * below avoids. At 1440px every interior masthead ran from 400px to 1040px
@@ -1586,7 +1583,7 @@ h4:hover > .heading-anchor,
 
 /* ── the bonsai ─────────────────────────────────────────────────────────── */
 
-/* The tree on the landing page: docs/plans/digital-garden-design.md, item 18.
+/* The tree on the landing page (docs/adr/0003).
  * The trunk is the site, each branch carries several notes, and every
  * published note is one foliage pad. It is not decoration - it is a picture of
  * what the garden currently contains, drawn from the garden.
@@ -1677,11 +1674,11 @@ h4:hover > .heading-anchor,
    * vault ten times the size of this one, and paying for it today is what kept
    * the picture small. At 1.25rem every vault up to about a hundred notes
    * still fits; past that `.bonsai-plate` scrolls, which is what its
-   * `overflow-x` is for. Item 19 composed the page around the tree at exactly
+   * `overflow-x` is for. The home page was composed around the tree at exactly
    * this ceiling and did not want the scale again, so 1.25rem is where the
    * question closed.
    *
-   * The SLOPE is item 19's, and it is the number nobody had looked at. At 2vw
+   * The SLOPE is the home page's, and it is the number nobody had looked at. At 2vw
    * a phone drew a thirty-two character tree about 150px wide, a smudge under
    * a name three times its size - on the one layout where the tree has the
    * whole width to itself, since the composition stacks there. 3.2vw makes it
@@ -1761,7 +1758,7 @@ h4:hover > .heading-anchor,
  *
  * One hue per shelf, declared as a variable rather than as a colour so that
  * the foliage, the link marks and the stage word in the caption all take the
- * same value from the same rule. Unscoped, because item 15 puts the same hue
+ * same value from the same rule. Unscoped, because the growth marks put the same hue
  * on links and marks elsewhere on the site.
  *
  * This used to be two rules NAMED for two folders - `.topic-slip-box` and

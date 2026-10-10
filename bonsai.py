@@ -1,10 +1,9 @@
 #!/usr/bin/env python3
 """Grow the garden's bonsai: a picture of the vault, drawn from the vault.
 
-Item 18 of docs/plans/digital-garden-design.md, and the answer to the brief
-that started that plan ("the site is a little boring"). The rejected answer was
-a stock photograph; the accepted rule is that anything added has to *report
-something true about the note it sits beside*. So this is not a decorative
+The answer to the brief "the site is a little boring". The rejected answer was
+a stock photograph; the accepted rule (docs/adr/0003) is that anything added has
+to *report something true about the note it sits beside*. So this is not a decorative
 tree. The trunk is the site, and every published note is a clump of foliage
 whose glyphs are its maturity and whose hue is its topic. Add a note and the
 tree grows; rewrite one and its clump changes.
@@ -48,8 +47,8 @@ set, and emitted as static markup - a few kilobytes of `<span>`-wrapped
 characters - so the page ships no generator and no library. The reader's
 browser only ever reveals characters that are already in the HTML.
 
-Run it directly to look at trees rather than at the site, which is the loop the
-plan's "taste pass" needs:
+Run it directly to look at trees rather than at the site, which is the loop judging
+whether a tree looks right needs:
 
     python3 bonsai.py                  # the vault's nineteen, as text
     python3 bonsai.py --notes 120      # what a hundred and twenty would look like
@@ -121,7 +120,7 @@ ASPECT = 1.9
 # How much wider than tall the crown looks ON SCREEN. A bonsai's crown is a
 # broad, shallow dome; a tall narrow one reads as a conifer.
 #
-# Raised from 1.6 by item 19's second pass, and the reason is the composition
+# Raised from 1.6 when the home page was composed, and the reason is the composition
 # rather than the tree. At 1.6 the whole picture - crown, bare trunk and pot -
 # came out 35x18 cells, which on screen is 1.11:1: a SQUARE. A square is the
 # one shape that cannot be a masthead, and it was what forced the home page's
@@ -1008,9 +1007,8 @@ def grow(notes, seed=DEFAULT_SEED):
     for sign in (-1, 1):
         place(pot_x + sign * (inner - 2), -2, "‾", "pot", at=POT_SET)
 
-    # The assertion the plan asks for. A tree that quietly drops a note is
-    # worse than no tree: the whole claim of this feature is that it is a
-    # picture of the garden.
+    # A tree that quietly drops a note is worse than no tree: the whole claim
+    # of this feature is that it is a picture of the garden.
     carried = {
         c.note for row in grid for c in row if c is not None and c.note is not None
     }
@@ -1238,8 +1236,7 @@ def render(notes, seed=None):
 
 # ---- running this file directly -----------------------------------------
 #
-# The plan calls the taste pass a session of its own, and says the only way to
-# judge a tree is to generate many and look at them. That needs a loop that
+# The only way to judge a tree is to generate many and look at them. That needs a loop that
 # does not involve a vault, a build or a browser, which is all this is.
 
 
