@@ -1,5 +1,5 @@
 {{/*
-  The left-hand margin, on every note now (item 17) rather than only on the
+  The left-hand margin, on every note rather than only on the
   ones with a table of contents or a backlink. The column is unconditional and
   its CONTENTS are conditional: the dates, the reading time and the maturity
   mark are always there, the section map appears when a note is sectioned
@@ -13,7 +13,7 @@
   they are a sidebar, and labelled in this order they read as the essay's own
   margin.
 
-  THE SECTION MAP IS A TABLE OF CONTENTS FIRST. The first cut of item 17 drew
+  THE SECTION MAP IS A TABLE OF CONTENTS FIRST. The first cut of the map drew
   it as a vertical strip of blocks whose HEIGHTS were proportional to their
   word counts, with the names revealed on hover. That put two variables on one
   axis: vertical extent had to carry both "how big is this section" and "how
@@ -23,8 +23,8 @@
   eleven hundred pixels tall, and size it to fit and the name has four pixels.
   It shipped sized-to-fit, and the contents list stopped being readable.
 
-  So the two variables go on two axes, which is the same move item 15 made when
-  it put maturity on shape and topic on hue. The NAME is a plain line of text,
+  So the two variables go on two axes, which is the same move the growth marks made
+  when they put maturity on shape and topic on hue. The NAME is a plain line of text,
   always legible, never behind a hover. The SIZE is the width of a rule
   underneath it — a bar chart lying on its side, where a 12:1 ratio is 20px
   against 240px and reads at a glance. And the READING is the fill of that
@@ -107,7 +107,7 @@
     {{ with .Params.maturity }}
       {{/* The same mark the /notes/ index and every internal link carry, from
            the same sprite: the shape is this note's maturity and the hue is
-           this note's topic, exactly as item 15 decided. The topic-* class is
+           this note's topic, exactly as the growth marks decide. The topic-* class is
            what carries the hue — the mark itself is drawn in currentColor —
            so a note on the Lighting shelf gets its mark in the shelf's orange
            here and on every page that links to it, and a note with no shelf
